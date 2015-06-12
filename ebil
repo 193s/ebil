@@ -1,0 +1,45 @@
+#!/bin/bash
+usage() {
+  echo "Usage: $0 new <elf>"
+}
+
+if [[ $1 = "new" ]]
+then
+  # check length
+  # $0 new <filename>
+  filename="exploit.py"
+  if [ $# -eq 2 ]
+  then
+    bin=$2
+  elif [ $# -eq 1 ]
+  then
+    bin="<binary file>"
+  else
+    usage
+    exit -1
+  fi
+
+  echo '->' $filename
+  # already exists
+  [[ -e $filename ]] && {
+    echo "$filename already exists"
+    exit -1
+  }
+
+  # copy template code
+  cat >> $filename << EOF
+#!/usr/bin/env python
+from pwn  import *
+from ebil import *
+
+e = ebil('$bin', remote=None)
+r = r.e
+
+EOF
+  chmod +x $filename
+
+  echo 'done'
+
+  else
+    usage
+fi
