@@ -33,7 +33,7 @@ from pwn  import *
 from ebil import *
 
 e = ebil('$bin', remote=None)
-r = r.e
+r = e.r
 
 EOF
   chmod +x $filename
