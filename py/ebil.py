@@ -35,11 +35,12 @@ class Ebil:
     else:
       r = pwn.remote(remote[0], remote[1])
 
-    self.r = r
+    self.r   = r
+    self.pid = r.proc.pid
 
   # set breakpoint; pause on pause mode
   def breakpoint(self):
     if self.pause:
-      pwn.log.success('pid = %d' % r.proc.pid)
+      pwn.log.success('pid = %d' % self.pid)
       pwn.ui.pause()
 

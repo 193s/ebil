@@ -8,13 +8,20 @@ Command line tools + python library
 
 
 ## Command line tools
-`ebil new` to generate `./exploit.py`  
-`ebil new <filename>` to generate `./exploit.py` with target elf `filename`
+`ebil new <filename>` -> `./exploit.py` with target elf `filename`
 
 
 ## Python library
-`pip install ebli`
+`cd py && pip install .`
 
+__usage__:
+```sh
+./exploit.py   # run locally
+./exploit.py p # run locally (pauses on breakpoints)
+./exploit.py r # remote
+
+```
+__exploit.py__:
 ```python
 #!/usr/bin/env python
 from pwn  import *
