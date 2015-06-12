@@ -2,16 +2,16 @@
 ebil is an exploit code framework for CTFs, based on pwntools
 
 Command line tools + python library
-## Runtime Environment
-### config file (TODO)
+### Runtime Environment
+#### config file (TODO)
 `$HOME/.ebil.conf`
 
 
-## Command line tools
+### Command line tools
 `ebil new <process>` -> `./exploit.py` with `process` will be generated
 
 
-## Python library
+### Python library
 `pip install ./py`
 
 __usage__:
@@ -41,4 +41,17 @@ e.breakpoint()
 r.sendline(payload)
 
 ```
+
+## Installation
+```bash
+git clone https://github.com/193s/ebil && cd ebil
+pip install ./py
+cp ./ebil /usr/local/bin/
+```
+
+## License
+Copyright (c) 2015 193s
+
+Published under the GNU GPLv2, see ./LICENSE
+
 
