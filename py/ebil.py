@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import pwn
+import elftools
 from sys import argv, exit
 
 # generator method
@@ -12,10 +13,15 @@ class Ebil:
     self.remote_info = remote
 
     # load ELF
-    elf = pwn.ELF(filename)
-    self.elf = elf
-    # checksec
-    print elf.checksec()
+    try:
+      elf = pwn.ELF(filename)
+      self.elf = elf
+      # checksec
+      print elf.checksec()
+    except elftools.common.exceptions.ELFError:
+      # not a elf file
+      self.elf = None
+      pass
 
 
     # return whether argv[1] contains `s` or not
