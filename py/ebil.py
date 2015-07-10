@@ -38,10 +38,10 @@ class Ebil:
 
     if local:
       r = pwn.process(filename)
-      self.pid = None
+      self.pid = r.proc.pid
     else:
       r = pwn.remote(remote[0], remote[1])
-      self.pid = r.proc.pid
+      self.pid = None
 
     self.r   = r
 
