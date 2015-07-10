@@ -38,11 +38,12 @@ class Ebil:
 
     if local:
       r = pwn.process(filename)
+      self.pid = None
     else:
       r = pwn.remote(remote[0], remote[1])
+      self.pid = r.proc.pid
 
     self.r   = r
-    self.pid = r.proc.pid
 
   # set breakpoint; pause on pause mode
   def breakpoint(self):
