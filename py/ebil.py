@@ -4,12 +4,12 @@ import elftools
 from sys import argv, exit
 
 # generator method
-def ebil(filename, remote=None):
+def ebil(filename, remote=None, args=[]):
   return Ebil(filename, remote)
 
 class Ebil:
 
-  def __init__(self, filename, remote):
+  def __init__(self, filename, remote, args):
     self.remote_info = remote
 
     # load ELF
@@ -37,7 +37,7 @@ class Ebil:
       print 'No remote server information; remote=(host, port)'
 
     if local:
-      r = pwn.process(filename)
+      r = pwn.process([filename] + args)
       self.pid = r.proc.pid
     else:
       r = pwn.remote(remote[0], remote[1])
