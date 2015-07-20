@@ -5,7 +5,7 @@ from sys import argv, exit
 
 # generator method
 def ebil(filename, remote=None, args=[]):
-  return Ebil(filename, remote)
+  return Ebil(filename, remote, args)
 
 class Ebil:
 
