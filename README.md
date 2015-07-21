@@ -17,7 +17,7 @@ Command line tools + python library
 __usage__:
 ```sh
 ./exploit.py   # run locally
-./exploit.py p # run locally (pauses on breakpoints)
+./exploit.py p # run locally (pause on breakpoints)
 ./exploit.py r # remote
 
 ```
@@ -26,27 +26,27 @@ __exploit.py__:
 #!/usr/bin/env python
 from pwn  import *
 from ebil import *
-e = ebil('./vuln', remote=('pwnable.example.com', 35555))
-r = e.r
 
-if e.local:
-  log.info('LOCAL')
+exec ebil('./vuln', remote=('pwnable.example.com', 35555))
+
+if LOCAL:
+  log.info('** LOCAL **')
 
 print r.recvline()
 
 payload = 'xxxx'
 print '>', payload
-e.breakpoint()
+breakpoint()
 
-r.sendline(payload)
+send(payload, 4)
 
 ```
 
 ## Installation
 ```bash
 git clone https://github.com/193s/ebil && cd ebil
+install -v ebil /usr/local/bin
 pip install ./py
-cp ./ebil /usr/local/bin/
 ```
 
 ## License
