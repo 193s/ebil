@@ -51,6 +51,11 @@ class Ebil:
   def __init__(self, filename, remote=None, args=[]):
     self.remote_info = remote
 
+    # detect null byte in args
+    for arg in args:
+      if '\0' in arg:
+        pwn.log.error('*** null byte detected in args ***')
+
     # already loaded or not a elf file -> pass
     # else -> load elf
     self.elf = self.elf if 'elf' in dir(self) else None
