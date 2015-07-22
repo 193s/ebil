@@ -32,8 +32,7 @@ then
 from pwn  import *
 from ebil import *
 
-e = ebil('$bin', remote=None)
-r = e.r
+exec ebil('$bin', remote=('host', 0))
 
 EOF
   chmod +x $filename
