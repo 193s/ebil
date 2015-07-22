@@ -44,7 +44,33 @@ def _is_elf(filename):
   except elftools.common.exceptions.ELFError:
     return False
 
+# set pwnlib.context: i386 linux
+def x86():
+  pwn.context.clear()
+  pwn.context.update(arch='i386', os='linux')
+# set pwnlib.context: amd64 linux
+def x86_64():
+  pwn.context.clear()
+  pwn.context.update(arch='amd64', os='linux')
 
+# default
+x86()
+
+# alias for p32/p64
+def p(a):
+  return pwn.p32(a) if pwn.context.bits == 32 else pwn.p64(a)
+# alias for u32/u64
+def u(a):
+  return pwn.u32(a) if pwn.context.bits == 64 else pwn.u64(a)
+
+# chain([addr_read, 0xdeadbeef, 0, addr_buf, 0x200, ...]) -> str
+def chain(ls):
+  return ''.join(map(p, ls))
+
+# open interactive console
+def console():
+  import code
+  code.InteractiveConsole(locals=globals()).interact()
 
 class Ebil:
 
