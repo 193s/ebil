@@ -61,7 +61,7 @@ def p(a):
   return pwn.p32(a) if pwn.context.bits == 32 else pwn.p64(a)
 # alias for u32/u64
 def u(a):
-  return pwn.u32(a) if pwn.context.bits == 64 else pwn.u64(a)
+  return pwn.u32(a) if pwn.context.bits == 32 else pwn.u64(a)
 
 # chain([addr_read, 0xdeadbeef, 0, addr_buf, 0x200, ...]) -> str
 def chain(ls):
