@@ -66,9 +66,9 @@ def chain(ls):
   return ''.join(map(p, ls))
 
 # open interactive console
+# exec console()
 def console():
-  import code
-  code.InteractiveConsole(locals=globals()).interact()
+  return "__import__('code').InteractiveConsole(locals=globals()).interact()"
 
 class Ebil:
 
