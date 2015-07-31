@@ -29,10 +29,9 @@ then
   # copy template code
   cat >> $filename << EOF
 #!/usr/bin/env python
-from pwn  import *
 from ebil import *
 
-exec ebil('$bin', remote=('host', 0))
+exec ebil('$bin', remote=None)
 
 EOF
   chmod +x $filename

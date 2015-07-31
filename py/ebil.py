@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import pwn
 import elftools
+from pwn import *
 from sys import argv, exit
 from termcolor import colored, cprint
 
@@ -39,29 +39,29 @@ def sendline(payload, length=None):
 
 def _is_elf(filename):
   try:
-    pwn.ELF(filename)
+    ELF(filename)
     return True
   except elftools.common.exceptions.ELFError:
     return False
 
 # set pwnlib.context: i386 linux
 def x86():
-  pwn.context.clear()
-  pwn.context.update(arch='i386', os='linux')
+  context.clear()
+  context.update(arch='i386', os='linux')
 # set pwnlib.context: amd64 linux
 def x86_64():
-  pwn.context.clear()
-  pwn.context.update(arch='amd64', os='linux')
+  context.clear()
+  context.update(arch='amd64', os='linux')
 
 # default
 x86()
 
 # alias for p32/p64
 def p(a):
-  return pwn.p32(a) if pwn.context.bits == 32 else pwn.p64(a)
+  return p32(a) if context.bits == 32 else p64(a)
 # alias for u32/u64
 def u(a):
-  return pwn.u32(a) if pwn.context.bits == 32 else pwn.u64(a)
+  return u32(a) if context.bits == 32 else u64(a)
 
 # chain([addr_read, 0xdeadbeef, 0, addr_buf, 0x200, ...]) -> str
 def chain(ls):
@@ -80,7 +80,7 @@ class Ebil:
     # detect null byte in args
     for arg in args:
       if '\0' in arg:
-        pwn.log.error('*** null byte detected in args ***')
+        log.error('*** null byte detected in args ***')
 
     # already loaded or not a elf file -> pass
     # else -> load elf
@@ -103,10 +103,10 @@ class Ebil:
       print 'No remote server information; remote=(host, port)'
 
     if local:
-      r = pwn.process([filename] + args)
+      r = process([filename] + args)
       self.pid = r.proc.pid
     else:
-      r = pwn.remote(remote[0], remote[1])
+      r = remote(remote[0], remote[1])
       self.pid = None
 
     self.r = r
@@ -114,20 +114,20 @@ class Ebil:
   # static analysis: load ELF
   def load(self, filename):
     try:
-      elf = pwn.ELF(filename)
+      elf = ELF(filename)
       self.elf = elf
       # checksec
       print elf.checksec()
     except elftools.common.exceptions.ELFError:
       # not a elf file
       self.elf = None
-      pwn.log.error('not a elf file: ' + elf)
+      log.error('not a elf file: ' + elf)
 
   # set breakpoint; pause on pause mode
   def breakpoint(self):
     if self.DEBUG:
-      pwn.log.success('pid = %d' % self.pid)
-      pwn.ui.pause()
+      log.success('pid = %d' % self.pid)
+      ui.pause()
 
 
 
