@@ -28,11 +28,9 @@ __usage__:
 __exploit.py__:
 ```python
 #!/usr/bin/env python
-from pwn  import *
 from ebil import *
 
-exec ebil('./vuln', remote=('pwnable.example.com', 35555), args=['wei'])
-x86_64()
+exec ebil('./vuln', remote=('pwnable.example.com', 35555), args=['wei'], arch='x86_64')
 
 if LOCAL: log.info('** LOCAL **')
 

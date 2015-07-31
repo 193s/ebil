@@ -5,8 +5,8 @@ from sys import argv, exit
 from termcolor import colored, cprint
 
 # generator
-def ebil(filename, remote=None, args=[]):
-  s = 'e = Ebil(%s, %s, %s)\n' % (repr(filename), repr(remote), repr(args))
+def ebil(filename, remote=None, args=[], arch='x86'):
+  s = 'e = Ebil(%s, %s, %s, %s)\n' % (repr(filename), repr(remote), repr(args), repr(arch))
   s += \
 r'''
 r = e.r
@@ -53,8 +53,6 @@ def x86_64():
   context.clear()
   context.update(arch='amd64', os='linux')
 
-# default
-x86()
 
 # alias for p32/p64
 def p(a):
@@ -74,13 +72,17 @@ def console():
 
 class Ebil:
 
-  def __init__(self, filename, remote=None, args=[]):
+  def __init__(self, filename, remote, args, arch):
     self.remote_info = remote
 
     # detect null byte in args
     for arg in args:
       if '\0' in arg:
         log.error('*** null byte detected in args ***')
+
+    # set arch
+    context.clear()
+    context.update(arch=arch, os='linux')
 
     # already loaded or not a elf file -> pass
     # else -> load elf
