@@ -16,7 +16,7 @@ DEBUG  = e.DEBUG
 elf = e.elf
 breakpoint = e.breakpoint
 
-def send(payload, length=None):
+def send(payload, length=None, validator=None):
   if length: prefix = '(%d/%d)>' % (len(payload), length)
   else:      prefix = '(%d)>'    % (len(payload))
   print colored(prefix, attrs=['bold']),
@@ -26,13 +26,16 @@ def send(payload, length=None):
   if length:
     if len(payload) > length:
       log.error('payload is too long')
-
+  # payload validation
+  if validator:
+    if not validator(payload):
+      log.error('payload validation failed')
 
   breakpoint()
   r.send(payload)
 
-def sendline(payload, length=None):
-  send(payload+'\n', length+1 if length else None)
+def sendline(payload, length=None, validator=None):
+  send(payload+'\n', length, validator)
 
 '''
   return s
@@ -69,6 +72,13 @@ def chain(ls):
 # exec console()
 def console():
   return "__import__('code').InteractiveConsole(locals=globals()).interact()"
+
+class PayloadValidator:
+  def ng_bytes(self, st, except_last=False):
+    return lambda p: all([
+      not byte in p
+        for byte in (st[:-1] if except_last else st)
+    ])
 
 class Ebil:
 
@@ -108,7 +118,7 @@ class Ebil:
       r = process([filename] + args)
       self.pid = r.proc.pid
     else:
-      r = remote(remote[0], remote[1])
+      r = pwnlib.tubes.remote.remote(remote[0], remote[1])
       self.pid = None
 
     self.r = r
