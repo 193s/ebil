@@ -64,9 +64,59 @@ def p(a):
 def u(a):
   return u32(a) if context.bits == 32 else u64(a)
 
-# chain([addr_read, 0xdeadbeef, 0, addr_buf, 0x200, ...]) -> str
+# chain([addr_read, 'AAAA', 0, addr_buf, 0x200, ...]) -> str
 def chain(ls):
-  return ''.join(map(p, ls))
+  return ''.join(map(lambda x: x if type(x)==str else p(x), ls))
+
+# repr_repeat('aaaaaaaaaaabc') -> "'a'*11 + 'bc'"
+def repr_repeat(s):
+  rep_mode = False
+  n = 0
+  block_list = []
+  def repr_s_noquote(s): return repr(s)[1:-1]
+
+  i = 0
+  while i < len(s)-1:
+    c, nc = s[i], s[i+1]
+    #print '  ', 'rep' if rep_mode else 'single', n, i, '(%s, %s)'%(repr(c),repr(nc))
+    # repeat mode
+    if rep_mode:
+      n += 1
+      if nc != c:
+        # 'a'*n + ?
+        # repeat blocks
+        block_list += ['%s*%d' % (repr(c), n)]
+        n = 0
+        rep_mode = False
+
+    # single mode
+    else:
+      if nc == c:
+        # single blocks
+        # 'abc' + 'c'
+        if n != 0: block_list += ['%s' % (repr(s[i-n:i]))]
+        n = 0
+        rep_mode = True
+        continue
+      else:
+        n += 1
+
+    i += 1
+  # fin
+  c = s[-1]
+  n += 1
+  if rep_mode:
+    if n == 1:
+      block_list += ['%s' % (repr(c))]
+    else:
+      block_list += ['%s*%d' % (repr(c), n)]
+  else:
+    block_list += ['%s' % (repr(s[-n:]))]
+
+  # export
+  def get_or_else(value, els): return value if value else els
+  return get_or_else(' + '.join(block_list), "''")
+
 
 # open interactive console
 # exec console()
