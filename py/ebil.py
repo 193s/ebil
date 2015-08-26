@@ -17,10 +17,7 @@ elf = e.elf
 breakpoint = e.breakpoint
 
 def send(payload, length=None, validator=None):
-  if length: prefix = '(%d/%d)>' % (len(payload), length)
-  else:      prefix = '(%d)>'    % (len(payload))
-  print colored(prefix, attrs=['bold']),
-  print colored(repr(payload), color='magenta')
+  highlight_payload(payload, length)
 
   # check payload length
   if length:
@@ -37,8 +34,17 @@ def send(payload, length=None, validator=None):
 def sendline(payload, length=None, validator=None):
   send(payload+'\n', length, validator)
 
+def interact():
+  r.interactive()
 '''
   return s
+
+def highlight_payload(payload, length=None):
+  if length: prefix = '(%d/%d)>' % (len(payload), length)
+  else:      prefix = '(%d)>'    % (len(payload))
+  print colored(prefix, attrs=['bold']),
+  print colored(repr(payload), color='magenta')
+
 
 def _is_elf(filename):
   try:
