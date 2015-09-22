@@ -5,8 +5,8 @@ from sys import argv, exit
 from termcolor import colored, cprint
 
 # generator
-def ebil(filename, remote=None, args=[], arch='x86'):
-  code = 'e = Ebil(%s, %s, %s, %s)\n' % (repr(filename), repr(remote), repr(args), repr(arch))
+def ebil(filename, remote=None, args=[], arch='x86', autostart=True):
+  code = 'e = Ebil(%s, %s, %s, %s, %s)\n' % (repr(filename), repr(remote), repr(args), repr(arch), repr(autostart))
   code += \
 r'''
 r = e.r
@@ -134,7 +134,7 @@ class PayloadValidator:
 
 class Ebil:
 
-  def __init__(self, filename, remote, args, arch):
+  def __init__(self, filename, remote, args, arch, autostart):
     self.remote_info = remote
 
     # detect null byte in args
@@ -167,8 +167,9 @@ class Ebil:
       print 'No remote server information; remote=(host, port)'
 
     if local:
-      r = process([filename] + args)
-      self.pid = r.proc.pid
+      if autostart:
+        r = process([filename] + args)
+        self.pid = r.proc.pid
     else:
       r = pwnlib.tubes.remote.remote(remote[0], remote[1])
       self.pid = None
@@ -193,5 +194,9 @@ class Ebil:
       log.success('pid = %d' % self.pid)
       ui.pause()
 
+  # TODO: alert if the binary has already executed
+  def start(args=[]):
+    r = process([filename] + args)
+    self.pid = r.proc.pid
 
 
