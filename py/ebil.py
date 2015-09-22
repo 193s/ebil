@@ -6,8 +6,8 @@ from termcolor import colored, cprint
 
 # generator
 def ebil(filename, remote=None, args=[], arch='x86'):
-  s = 'e = Ebil(%s, %s, %s, %s)\n' % (repr(filename), repr(remote), repr(args), repr(arch))
-  s += \
+  code = 'e = Ebil(%s, %s, %s, %s)\n' % (repr(filename), repr(remote), repr(args), repr(arch))
+  code += \
 r'''
 r = e.r
 LOCAL  = e.LOCAL
@@ -37,7 +37,7 @@ def sendline(payload, length=None, validator=None):
 def interact():
   r.interactive()
 '''
-  return s
+  return code
 
 def highlight_payload(payload, length=None):
   if length: prefix = '(%d/%d)>' % (len(payload), length)
@@ -53,20 +53,16 @@ def _is_elf(filename):
   except elftools.common.exceptions.ELFError:
     return False
 
-# set pwnlib.context: i386 linux
-def x86():
+# set architecture; pwnlib.context.arch
+def setarch(arch):
   context.clear()
-  context.update(arch='i386', os='linux')
-# set pwnlib.context: amd64 linux
-def x86_64():
-  context.clear()
-  context.update(arch='amd64', os='linux')
+  context.update(arch=arch, os='linux')
 
 
-# alias for p32/p64
+# pack; alias for p32/p64
 def p(a):
   return p32(a) if context.bits == 32 else p64(a)
-# alias for u32/u64
+# unpack; alias for u32/u64
 def u(a):
   return u32(a) if context.bits == 32 else u64(a)
 
