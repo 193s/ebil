@@ -1,4 +1,4 @@
-# ebil - Exploit code framework for CTFs
+# ebil
 ebil is an exploit code framework for CTFs, based on pwntools
 
 Command line tools + python library
