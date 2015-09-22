@@ -170,11 +170,14 @@ class Ebil:
       if autostart:
         r = process([filename] + args)
         self.pid = r.proc.pid
+      else:
+        r = None
     else:
       r = pwnlib.tubes.remote.remote(remote[0], remote[1])
       self.pid = None
 
     self.r = r
+    self.filename = filename
 
   # static analysis: load ELF
   def load(self, filename):
@@ -195,8 +198,9 @@ class Ebil:
       ui.pause()
 
   # TODO: alert if the binary has already executed
-  def start(args=[]):
-    r = process([filename] + args)
+  def start(self, args=[]):
+    r = process([self.filename] + args)
+    self.r = r
     self.pid = r.proc.pid
 
 
