@@ -6,10 +6,6 @@ Command line tools + python library
 
 ![](https://gist.githubusercontent.com/193s/bdcf6ed0864cfb051336/raw/44248717b121f93366ea8dc50762883da3c386a9/ss.png)
 
-### Runtime Environment
-#### config file (TODO)
-`$HOME/.ebil.conf`
-
 
 ### Command line tools
 `ebil new <process>` -> `./exploit.py` with `process` will be generated
