@@ -152,10 +152,25 @@ class Ebil:
     if not(self.elf) and _is_elf(filename):
       self.load(filename)
 
-    # return whether argv[1] contains `s` or not
-    def _opt(s):
-      return len(argv) == 2 and s in argv[1]
+    # check argv
+    argv_ok = True
 
+    allow_cmds = list('rp')
+    if len(argv) == 1:
+      argv_ok = True # ok
+    elif len(argv) == 2:
+      # check cmd option
+      argv_ok = all([c in allow_cmds for c in argv[1]])
+    else:
+      argv_ok = False
+
+    if not argv_ok:
+      code_filename = argv[0].split('/')[-1]
+      print 'Usage: %s [rp]?' % code_filename
+      log.error('invalid argument!')
+
+    # return whether argv[1] contains `s` or not
+    def _opt(s): return len(argv) >= 2 and s in argv[1]
     local = not _opt('r')
     pause =     _opt('p')
 
